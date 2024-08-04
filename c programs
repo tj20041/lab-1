@@ -1,0 +1,109 @@
+Q1) #include <stdio.h>
+int main() {
+int n;
+printf("Enter the number of integers: ");
+scanf("%d", &n);
+if (n <= 0) {
+printf("Invalid input. Please enter a positive integer.\n");
+return 1;
+}
+int arr[n];
+double sum = 0.0;
+printf("Enter %d integers:\n", n);
+for (int i = 0; i < n; ++i) {
+scanf("%d", &arr[i]);
+sum += arr[i];
+}
+double average = sum / n;
+printf("The average of the entered integers is: %.2lf\n", average);
+return 0;
+}
+Q2) #include <stdio.h>
+char toLowerCaseChar(char ch) {
+if (ch >= 'A' && ch <= 'Z') {
+return ch + ('a' - 'A');
+} return ch;
+} int isDelimiter(char ch) {
+return ch == ' ' || ch == ',' || ch == '.' || ch == '!' || ch == '?' || ch == '\n' || ch == '\t';
+} int compareStrings(char *
+str1, char *
+str2) {
+while (*str1 && *str2) {
+if (*str1 != *str2) {
+return *str1 - *str2;
+}
+str1++;
+str2++;
+} return *
+str1 -
+*
+str2;
+}
+void copyString(char *dest, const char *src) {
+while (*src) {
+*dest++ = *src++;
+}
+*dest = '\0';
+} int findWord(char words[MAX_WORDS][MAX_WORD_LENGTH], int wordCount, char *
+word) {
+for (int i = 0; i < wordCount; i++) {
+if (compareStrings(words[i], word) == 0) {
+return i;
+}
+} return -
+1;
+}
+int main() {
+char paragraph[5000];
+char words[MAX_WORDS][MAX_WORD_LENGTH];
+int frequency[MAX_WORDS] = {0};
+int wordCount = 0;
+printf("Enter a paragraph: ");
+fgets(paragraph, sizeof(paragraph), stdin);
+char currentWord[MAX_WORD_LENGTH];
+int currentIndex = 0;
+int i = 0;
+while (paragraph[i] != '\0') {
+if (isDelimiter(paragraph[i])) {
+if (currentIndex > 0) {
+currentWord[currentIndex] = '\0';
+// Convert to lowercase
+for (int j = 0; j < currentIndex; j++) {
+currentWord[j] = toLowerCaseChar(currentWord[j]);
+} int index =
+findWord(words, wordCount, currentWord);
+if (index == -1) {
+copyString(words[wordCount], currentWord);
+frequency[wordCount]++;
+wordCount++;
+} else {
+frequency[index]++;
+}
+currentIndex = 0;
+}
+} else {
+currentWord[currentIndex++] = paragraph[i];
+} i++;
+} if (
+currentIndex >
+0) {
+currentWord[currentIndex] = '\0';
+// Convert to lowercase
+for (int j = 0; j < currentIndex; j++) {
+currentWord[j] = toLowerCaseChar(currentWord[j]);
+} int index =
+findWord(words, wordCount, currentWord);
+if (index == -1) {
+copyString(words[wordCount], currentWord);
+frequency[wordCount]++;
+wordCount++;
+} else {
+frequency[index]++;
+}
+}
+printf("\nWord Frequencies:\n");
+for (int i = 0; i < wordCount; i++) {
+printf("%s: %d\n", words[i], frequency[i]);
+}
+return 0;
+}
